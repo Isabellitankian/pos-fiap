@@ -1,1 +1,1 @@
-pip install unidecode
+unidecode
