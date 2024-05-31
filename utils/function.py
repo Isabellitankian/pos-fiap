@@ -47,3 +47,69 @@ aluno2 = Aluno(nome = 'Maria')
 turma = Turma()
 turma.adicionar_aluno(aluno1)
 turma.adicionar_aluno(aluno2)
+
+class MinhaMetaclasse(type):
+    def __new__(cls, nome, bases, dct):
+        
+        #adiciona um novo tributo à classe
+        dct['novo atributo'] = 42
+        nova_classe = super().__new__(cls, nome, bases, dct)
+        return nova_classe
+    
+    #usando a meta-classe para criar uma nova classe
+class MinhaClasse(metaclass=MinhaMetaclasse):
+    pass
+
+# Testando a nova classe
+
+objeto = MinhaClasse()
+print(MinhaClasse.novo_atributo)
+
+class Singleton:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(Singleton, cls).__new__(cls)
+        return cls._instance
+
+#testando o Singleton 
+s1 = Singleton()
+s2 = Singleton()
+
+print(s1 is s2) #saida deve ser: True 
+
+from abc import ABC, abstractclassmethod
+
+class Observer(ABC): # interface observar 
+    @abstractclassmethod
+    def update(self, message):
+        pass
+
+class Subject: #subject (ou observable)
+    _observers = []
+    def add_observer(self, observer):
+        self._observers.append(observer)
+
+    def remove_observer(self, observer):
+        self._observers.remove(observer)
+
+    def notify_observer(self, message):
+        for observer in self._observers:
+            observer.update(message)
+
+class ConcreteObserver(Observer): #concrete observer
+    def update(self, message):
+        print(f"Recebi a mesagem: {message}")
+
+subject = Subject()
+observer1 = ConcreteObserver()
+observer2 = ConcreteObserver()
+
+subject.add_observer(observer1)
+subject.add_observer(observer2)
+
+subject.notify_observer("novo estado!")
+
+# saída: Recebi a mesagem: novo estado!
+# Recebi a mesagem: novo estado!
