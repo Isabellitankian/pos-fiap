@@ -79,7 +79,7 @@ s2 = Singleton()
 
 print(s1 is s2) #saida deve ser: True 
 
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractclassmethod, abstractmethod
 
 class Observer(ABC): # interface observar 
     @abstractclassmethod
@@ -113,3 +113,34 @@ subject.notify_observer("novo estado!")
 
 # saída: Recebi a mesagem: novo estado!
 # Recebi a mesagem: novo estado!
+
+
+class Strategy(ABC): # interface Strategy
+    @abstractmethod
+    def execute(self):
+        pass
+
+class ConcreteStrategyA(Strategy):
+    def execute(self):
+        print("Executando estratégia A")
+
+class ConcreteStrategyB(Strategy):
+    def execute(self):
+        print("Executando estratégia B")
+
+class Context:     #contexto
+    def __init__(self, strategy):
+        self._strategy = strategy
+    def set_strategy(self, strategy):
+        self._strategy = strategy
+    def execute_strategy(self):
+        self._strategy.execute()
+
+strategy_a = ConcreteStrategyA()
+strategy_b = ConcreteStrategyB()
+
+context = Context(strategy_a)
+context.execute_strategy()  #saida: Executando estratégia A
+
+context.set_strategy(strategy_b)
+context.execute_strategy()   #saida: Executando estratégia B
